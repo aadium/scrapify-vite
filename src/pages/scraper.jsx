@@ -116,6 +116,19 @@ export default function ScraperDetails() {
         downloadLink.click();
     }
 
+    async function downloadXML(oid) {
+        const data = await fetch(`https://web-scraping-demo-8p7f.onrender.com/scraper/output/${oid}`, {
+            method: 'GET'
+        })
+            .then(response => response.json())
+            .catch(error => console.error('Error fetching output:', error));
+        const xml = data.map(row => `<row>${Object.entries(row).map(([key, value]) => `<${key}>${value}</${key}>`).join('')}</row>`).join('\n');
+        const blob = new Blob([xml], { type: 'text/xml' });
+        const downloadLink = document.createElement('a');
+        downloadLink.href = URL.createObjectURL(blob);
+        downloadLink.download = `${oid}.xml`;
+        downloadLink.click();
+    }
 
     useEffect(() => {
         const tokenString = localStorage.getItem('token');
@@ -238,6 +251,10 @@ export default function ScraperDetails() {
                                 <button className="text-green-500 hover:underline cursor-pointer" onClick={
                                     () => downloadCSV(output.id)
                                 }>CSV</button>
+                                <span className="mx-2">|</span>
+                                <button className="text-red-500 hover:underline cursor-pointer" onClick={
+                                    () => downloadXML(output.id)
+                                }>XML</button>
                                 </td>
                                 <td className="px-4 py-3">
                                     <a href={`https://web-scraping-demo-8p7f.onrender.com/scraper/output/${output.id}`} target='_blank' className="hover:underline cursor-pointer">Preview</a>
