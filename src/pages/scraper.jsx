@@ -102,6 +102,21 @@ export default function ScraperDetails() {
             });
     }
 
+    async function downloadCSV(oid) {
+        const data = await fetch(`https://web-scraping-demo-8p7f.onrender.com/scraper/output/${oid}`, {
+            method: 'GET'
+        })
+            .then(response => response.json())
+            .catch(error => console.error('Error fetching output:', error));
+        const csv = data.map(row => Object.values(row).map(value => `"${value.replace(/"/g, '""')}"`).join(',')).join('\n');
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const downloadLink = document.createElement('a');
+        downloadLink.href = URL.createObjectURL(blob);
+        downloadLink.download = `${oid}.csv`;
+        downloadLink.click();
+    }
+
+
     useEffect(() => {
         const tokenString = localStorage.getItem('token');
         let token = null;
@@ -197,7 +212,8 @@ export default function ScraperDetails() {
                         <tr>
                             <th className="px-4 py-2 text-black">ID</th>
                             <th className="px-4 py-2 text-black">Date and Time</th>
-                            <th className="px-4 py-2 text-black">JSON Output</th>
+                            <th className="px-4 py-2 text-black">Download</th>
+                            <th className="px-4 py-2 text-black"></th>
                         </tr>
                     </thead>
                     <tbody className="bg-zinc-950 rounded-b-lg text-white ring-1 ring-white ring-inset">
@@ -215,8 +231,16 @@ export default function ScraperDetails() {
                                     }
                                 </td>
                                 <td className="px-4 py-3">
-                                    <a href={`https://web-scraping-demo-8p7f.onrender.com/scraper/output/${output.id}`} target='_blank' className="text-orange-500 hover:underline cursor-pointer">Preview</a>
-                                    <a href={output.bucket_url} target='_blank' className="text-orange-500 hover:underline ml-5">Download</a>
+                                <button className="text-orange-500 hover:underline cursor-pointer" onClick={
+                                    () => window.open(output.bucket_url, '_blank')
+                                }>JSON</button>
+                                <span className="mx-2">|</span>
+                                <button className="text-green-500 hover:underline cursor-pointer" onClick={
+                                    () => downloadCSV(output.id)
+                                }>CSV</button>
+                                </td>
+                                <td className="px-4 py-3">
+                                    <a href={`https://web-scraping-demo-8p7f.onrender.com/scraper/output/${output.id}`} target='_blank' className="hover:underline cursor-pointer">Preview</a>
                                 </td>
                             </tr>
                         ))}
