@@ -9,6 +9,8 @@ export default function ScraperDetails() {
     const [scraperDetails, setScraperDetails] = useState({});
     const [outputs, setOutputs] = useState([]);
     const { id } = useParams();
+    const [loading, setLoading] = useState(true);
+    const [outputLoading, setOutputLoading] = useState(true);
 
     function runScraper() {
         setRunning(true);
@@ -50,6 +52,7 @@ export default function ScraperDetails() {
             })
             .then((data) => {
                 setScraperDetails(data);
+                setLoading(false);
             })
             .catch((error) => {
                 console.error('Error fetching scraper details:', error);
@@ -96,6 +99,7 @@ export default function ScraperDetails() {
             })
             .then((data) => {
                 setOutputs(data);
+                setOutputLoading(false);
             })
             .catch((error) => {
                 console.error('Error fetching outputs:', error);
@@ -182,94 +186,123 @@ export default function ScraperDetails() {
         <div className="flex flex-col items-center bg-black pt-20">
             <Header />
             <div className="bg-zinc-950 border border-2 border-white p-7 rounded-md shadow max-w-md">
-                <h1 className="text-2xl font-bold dark:text-white">{scraperDetails.name}</h1>
-                <p className="text-gray-500 dark:text-gray-400 my-3">
-                    Created at: {
-                        new Date(scraperDetails.created_at).toLocaleDateString('en-US', {
-                            day: '2-digit', month: 'short', year: 'numeric'
-                        }) + ', ' +
-                        new Date(scraperDetails.created_at).toLocaleTimeString('en-US', {
-                            hour: '2-digit', minute: '2-digit', hour12: true
-                        }).toLowerCase()
-                    }
-                </p>
-                <a href={scraperDetails.url} target='_blank' className="text-orange-500 hover:underline">{scraperDetails.url}</a>
-                <div className="mt-4">
-                    <h2 className="text-xl font-semibold text-white">Selectors</h2>
-                    {scraperDetails.selectors && (
-                        <table className="bg-zinc-900 mt-2 rounded-md w-full">
-                            <tbody>
-                                {Object.entries(scraperDetails.selectors).map(([key, value]) => (
-                                    <tr key={key}>
-                                        <td className="py-3 px-5 text-orange-500 font-bold text-center">{key}</td>
-                                        <td className="py-3 px-5 text-white text-center">{value}</td>
+                {
+                    loading ? (
+                        <div class="flex justify-center items-center h-max">
+                            <div class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-e-transparent text-warning motion-reduce:animate-[spin_2s_linear_infinite]"
+                                role="status">
+                                <span class="absolute -m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 clip:rect(0,0,0,0)">Loading...</span>
+                            </div>
+                        </div>
+                    ) : (
+                        <div>
+                            <h1 className="text-2xl font-bold dark:text-white">{scraperDetails.name}</h1>
+                            <p className="text-gray-500 dark:text-gray-400 my-3">
+                                Created at: {
+                                    new Date(scraperDetails.created_at).toLocaleDateString('en-US', {
+                                        day: '2-digit', month: 'short', year: 'numeric'
+                                    }) + ', ' +
+                                    new Date(scraperDetails.created_at).toLocaleTimeString('en-US', {
+                                        hour: '2-digit', minute: '2-digit', hour12: true
+                                    }).toLowerCase()
+                                }
+                            </p>
+                            <a href={scraperDetails.url} target='_blank' className="text-orange-500 hover:underline">{scraperDetails.url}</a>
+                            <div className="mt-4">
+                                <h2 className="text-xl font-semibold text-white">Selectors</h2>
+                                {scraperDetails.selectors && (
+                                    <table className="bg-zinc-900 mt-2 rounded-md w-full">
+                                        <tbody>
+                                            {Object.entries(scraperDetails.selectors).map(([key, value]) => (
+                                                <tr key={key}>
+                                                    <td className="py-3 px-5 text-orange-500 font-bold text-center">{key}</td>
+                                                    <td className="py-3 px-5 text-white text-center">{value}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                )}
+                            </div>
+                            <div className="flex justify-between mt-4">
+                                <button className="rounded-md bg-orange-600 py-2 px-4 mr-2 text-white w-full flex justify-center items-center hover:bg-orange-700 transition duration-300" onClick={
+                                    running ? null : runScraper
+                                }>
+                                    {running ? (
+                                        <div class="inline-block h-5 w-5 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-warning motion-reduce:animate-[spin_2s_linear_infinite]"
+                                            role="status">
+                                            <span
+                                                class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+                                            >Loading...</span>
+                                        </div>
+                                    ) : (
+                                        'Run'
+                                    )}
+                                </button>
+                                <button className="rounded-md bg-orange-600 py-2 px-4 text-white w-full hover:bg-orange-700 transition duration-300" onClick={deleteScraper}>
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    )
+                }
+            </div>
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-white">Scrape Results</h2>
+            {
+                outputLoading ? (
+                    <div class="flex justify-center items-center h-max mt-5">
+                        <div class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-e-transparent text-warning motion-reduce:animate-[spin_2s_linear_infinite]"
+                            role="status">
+                            <span class="absolute -m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 clip:rect(0,0,0,0)">Loading...</span>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="mt-6 w-full px-20 text-center">
+                        <a name="page-top" />
+                        <table className="table-auto rounded-md w-full overflow-hidden">
+                            <thead className="bg-white">
+                                <tr>
+                                    <th className="px-4 py-2 text-black">ID</th>
+                                    <th className="px-4 py-2 text-black">Date and Time</th>
+                                    <th className="px-4 py-2 text-black">Download</th>
+                                </tr>
+                            </thead>
+                            <tbody className="bg-zinc-950 rounded-b-lg text-white ring-1 ring-white ring-inset">
+                                {outputs.map((output) => (
+                                    <tr key={output.id}>
+                                        <td className="px-4 py-3 hover:cursor-pointer hover:underline" onClick={
+                                            () => navigate(`/scraper/output/${output.id}`)
+                                        }>{output.id}</td>
+                                        <td className="px-4 py-3">
+                                            {
+                                                new Date(output.created_at).toLocaleDateString('en-US', {
+                                                    day: '2-digit', month: 'short', year: 'numeric'
+                                                }) + ', ' +
+                                                new Date(output.created_at).toLocaleTimeString('en-US', {
+                                                    hour: '2-digit', minute: '2-digit', hour12: true
+                                                }).toLowerCase()
+                                            }
+                                        </td>
+                                        <td className="px-4 py-3">
+                                            <button className="text-orange-500 hover:underline cursor-pointer" onClick={
+                                                () => window.open(output.bucket_url, '_blank')
+                                            }>JSON</button>
+                                            <span className="mx-2">|</span>
+                                            <button className="text-green-500 hover:underline cursor-pointer" onClick={
+                                                () => downloadCSV(output.id)
+                                            }>CSV</button>
+                                            <span className="mx-2">|</span>
+                                            <button className="text-red-500 hover:underline cursor-pointer" onClick={
+                                                () => downloadXML(output.id)
+                                            }>XML</button>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
-                    )}
-                </div>
-                <div className="flex justify-between mt-4">
-                    <button className="rounded-md bg-orange-600 py-2 px-4 mr-2 text-white w-full flex justify-center items-center hover:bg-orange-700 transition duration-300" onClick={
-                        running ? null : runScraper
-                    }>
-                        {running ? (
-                            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-l-2 border-white"></div>
-                        ) : (
-                            'Run'
-                        )}
-                    </button>
-                    <button className="rounded-md bg-orange-600 py-2 px-4 text-white w-full hover:bg-orange-700 transition duration-300" onClick={deleteScraper}>
-                        Delete
-                    </button>
-                </div>
-            </div>
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-white">Scrape Results</h2>
-            <div className="mt-6 w-full px-20 text-center">
-                <a name="page-top" />
-                <table className="table-auto rounded-md w-full overflow-hidden">
-                    <thead className="bg-white">
-                        <tr>
-                            <th className="px-4 py-2 text-black">ID</th>
-                            <th className="px-4 py-2 text-black">Date and Time</th>
-                            <th className="px-4 py-2 text-black">Download</th>
-                        </tr>
-                    </thead>
-                    <tbody className="bg-zinc-950 rounded-b-lg text-white ring-1 ring-white ring-inset">
-                        {outputs.map((output) => (
-                            <tr key={output.id}>
-                                <td className="px-4 py-3 hover:cursor-pointer hover:underline" onClick={
-                                    () => navigate(`/scraper/output/${output.id}`)
-                                }>{output.id}</td>
-                                <td className="px-4 py-3">
-                                    {
-                                        new Date(output.created_at).toLocaleDateString('en-US', {
-                                            day: '2-digit', month: 'short', year: 'numeric'
-                                        }) + ', ' +
-                                        new Date(output.created_at).toLocaleTimeString('en-US', {
-                                            hour: '2-digit', minute: '2-digit', hour12: true
-                                        }).toLowerCase()
-                                    }
-                                </td>
-                                <td className="px-4 py-3">
-                                    <button className="text-orange-500 hover:underline cursor-pointer" onClick={
-                                        () => window.open(output.bucket_url, '_blank')
-                                    }>JSON</button>
-                                    <span className="mx-2">|</span>
-                                    <button className="text-green-500 hover:underline cursor-pointer" onClick={
-                                        () => downloadCSV(output.id)
-                                    }>CSV</button>
-                                    <span className="mx-2">|</span>
-                                    <button className="text-red-500 hover:underline cursor-pointer" onClick={
-                                        () => downloadXML(output.id)
-                                    }>XML</button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-                <br />
-            </div>
+                        <br />
+                    </div>
+                )
+            }
         </div>
     );
 }
