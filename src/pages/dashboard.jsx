@@ -85,7 +85,7 @@ export default function Dashboard() {
                         </thead>
                         <tbody className="bg-zinc-950 rounded-b-lg text-white ring-1 ring-white ring-inset">
                             {scrapers.map((scraper) => (
-                                <tr key={scraper.id} className=" cursor-pointer hover:ring-1 hover:ring-white hover:ring-inset hover:bg-zinc-900" onClick={
+                                <tr key={scraper.id} className="cursor-pointer hover:ring-1 hover:ring-white hover:ring-inset hover:bg-zinc-900" onClick={
                                     () => navigate(`/scraper/${scraper.id}`)
                                 }>
                                     <td className="px-4 py-3">{scraper.name}</td>
