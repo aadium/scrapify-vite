@@ -13,6 +13,42 @@ export default function Output() {
         setScraperOutput(data);
     }
 
+    async function downloadCSV(oid) {
+        const data = scraperOutput;
+        if (data.length > 0) {
+            const columnTitles = Object.keys(data[0]).join(',');
+            const csvRows = data.map(row =>
+                Object.values(row).map(value =>
+                    `"${value.toString().replace(/"/g, '""')}"`).join(',')
+            );
+            const csv = [columnTitles, ...csvRows].join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const downloadLink = document.createElement('a');
+            downloadLink.href = URL.createObjectURL(blob);
+            downloadLink.download = `${oid}.csv`;
+            downloadLink.click();
+        }
+    }
+
+    async function downloadXML(oid) {
+        const data = scraperOutput;
+        const xml = data.map(row => `<row>${Object.entries(row).map(([key, value]) => `<${key}>${value}</${key}>`).join('')}</row>`).join('\n');
+        const blob = new Blob([xml], { type: 'text/xml' });
+        const downloadLink = document.createElement('a');
+        downloadLink.href = URL.createObjectURL(blob);
+        downloadLink.download = `${oid}.xml`;
+        downloadLink.click();
+    }
+
+    async function downloadJSON(oid) {
+        const data = scraperOutput;
+        const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+        const downloadLink = document.createElement('a');
+        downloadLink.href = URL.createObjectURL(blob);
+        downloadLink.download = `${oid}.json`;
+        downloadLink.click();
+    }
+
     useEffect(() => {
         getScraperOutput();
     }, []);
@@ -24,6 +60,9 @@ export default function Output() {
             {scraperOutput && (
                 <div className="mt-6 flex justify-center">
                     <div className="overflow-x-auto">
+                        <button className="bg-orange-600 text-white font-bold py-2 px-4 mr-2 rounded-md mb-4" onClick={() => downloadJSON(id)}>Download JSON</button>
+                        <button className="bg-green-700 text-white font-bold py-2 px-4 mr-2 rounded-md mb-4" onClick={() => downloadCSV(id)}>Download CSV</button>
+                        <button className="bg-red-600 text-white font-bold py-2 px-4 rounded-md mb-4" onClick={() => downloadXML(id)}>Download XML</button>
                         <table className="table-auto rounded-md w-full overflow-hidden">
                             <thead className="bg-white">
                                 <tr>
