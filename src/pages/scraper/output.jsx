@@ -5,6 +5,7 @@ export default function Output() {
     const { id } = useParams();
     const [scraperOutput, setScraperOutput] = useState([]);
     const [sentimentAnalysis, setSentimentAnalysis] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     async function getScraperOutput() {
         const response = await fetch(`https://web-scraping-demo-8p7f.onrender.com/scraper/output/${id}`, {
@@ -12,6 +13,7 @@ export default function Output() {
         });
         const data = await response.json();
         setScraperOutput(data);
+        setLoading(false);
     }
 
     async function getSentimentAnalysis() {
@@ -35,7 +37,7 @@ export default function Output() {
             return 'bg-zinc-900'; // Neutral sentiment
         }
     };
-    
+
 
     async function downloadCSV(oid) {
         const data = scraperOutput;
@@ -81,7 +83,7 @@ export default function Output() {
 
     return (
         <div>
-            {scraperOutput && (
+            {scraperOutput && !loading ? (
                 <div className="mt-6 flex justify-center">
                     <div className="overflow-x-auto">
                         <div className="flex justify-center">
@@ -118,6 +120,13 @@ export default function Output() {
                                 ))}
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            ) : (
+                <div class="flex justify-center items-center h-screen">
+                    <div class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-e-transparent text-warning motion-reduce:animate-[spin_2s_linear_infinite]"
+                        role="status">
+                        <span class="absolute -m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 clip:rect(0,0,0,0)">Loading...</span>
                     </div>
                 </div>
             )}

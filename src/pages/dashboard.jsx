@@ -6,6 +6,7 @@ export default function Dashboard() {
     const navigate = useNavigate();
     const [bearerToken, setBearerToken] = useState('');
     const [scrapers, setScrapers] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     function getScrapers() {
         fetch('https://web-scraping-demo-8p7f.onrender.com/scraper', {
@@ -22,6 +23,7 @@ export default function Dashboard() {
             })
             .then((data) => {
                 setScrapers(data);
+                setLoading(false);
             })
             .catch((error) => {
                 console.error('Error fetching scrapers:', error);
@@ -83,19 +85,36 @@ export default function Dashboard() {
                                 <th className="px-4 py-2 text-black">Selectors</th>
                             </tr>
                         </thead>
-                        <tbody className="bg-zinc-950 rounded-b-lg text-white ring-1 ring-white ring-inset">
-                            {scrapers.map((scraper) => (
-                                <tr key={scraper.id} className="cursor-pointer hover:ring-1 hover:ring-white hover:ring-inset hover:bg-zinc-900" onClick={
-                                    () => navigate(`/scraper/${scraper.id}`)
-                                }>
-                                    <td className="px-4 py-3">{scraper.name}</td>
-                                    <td className="px-4 py-3">{scraper.url}</td>
-                                    <td className="px-4 py-3">
-                                        {Object.entries(scraper.selectors).map(([key, value]) => `${key}: ${value}`).join(', ')}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
+                        {
+                            loading ? (
+                                <tbody className="bg-zinc-950 rounded-b-lg text-white ring-1 ring-white ring-inset">
+                                    <tr>
+                                        <td colSpan="3" className="px-4 py-3">
+                                            <div class="flex justify-center items-center h-max">
+                                                <div class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-e-transparent text-warning motion-reduce:animate-[spin_2s_linear_infinite]"
+                                                    role="status">
+                                                    <span class="absolute -m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 clip:rect(0,0,0,0)">Loading...</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            ) : (
+                                <tbody className="bg-zinc-950 rounded-b-lg text-white ring-1 ring-white ring-inset">
+                                    {scrapers.map((scraper) => (
+                                        <tr key={scraper.id} className="cursor-pointer hover:ring-1 hover:ring-white hover:ring-inset hover:bg-zinc-900" onClick={
+                                            () => navigate(`/scraper/${scraper.id}`)
+                                        }>
+                                            <td className="px-4 py-3">{scraper.name}</td>
+                                            <td className="px-4 py-3">{scraper.url}</td>
+                                            <td className="px-4 py-3">
+                                                {Object.entries(scraper.selectors).map(([key, value]) => `${key}: ${value}`).join(', ')}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            )
+                        }
                     </table>
                     <button className="rounded-md bg-orange-600 py-2 px-4 text-white hover:bg-orange-700 transition duration-300 my-2" onClick={
                         () => navigate('/dashboard/add')
