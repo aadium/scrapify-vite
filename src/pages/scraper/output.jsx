@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom';
 
 export default function Output() {
     const { id } = useParams();
-    const [scraperOutput, setScraperOutput] = useState(null);
+    const [scraperOutput, setScraperOutput] = useState([]);
+    const [sentimentAnalysis, setSentimentAnalysis] = useState([]);
 
     async function getScraperOutput() {
         const response = await fetch(`https://web-scraping-demo-8p7f.onrender.com/scraper/output/${id}`, {
@@ -11,6 +12,20 @@ export default function Output() {
         });
         const data = await response.json();
         setScraperOutput(data);
+    }
+
+    async function getSentimentAnalysis() {
+        console.log('Sending scraperOutput:', scraperOutput);
+        const response = await fetch(`https://web-scraping-demo-8p7f.onrender.com/scraper/sentiment`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ data: scraperOutput }),
+        });
+        const data = await response.json();
+        setSentimentAnalysis(data);
+        console.log(data);
     }
 
     async function downloadCSV(oid) {
@@ -61,6 +76,7 @@ export default function Output() {
                 <div className="mt-6 flex justify-center">
                     <div className="overflow-x-auto">
                         <div className="flex justify-center">
+                            <button className="bg-blue-600 text-white font-bold py-2 px-4 mr-2 rounded-md mb-4" onClick={getSentimentAnalysis}>Sentiment Analysis</button>
                             <button className="bg-orange-600 text-white font-bold py-2 px-4 mr-2 rounded-md mb-4" onClick={() => downloadJSON(id)}>Download JSON</button>
                             <button className="bg-green-700 text-white font-bold py-2 px-4 mr-2 rounded-md mb-4" onClick={() => downloadCSV(id)}>Download CSV</button>
                             <button className="bg-red-600 text-white font-bold py-2 px-4 rounded-md mb-4" onClick={() => downloadXML(id)}>Download XML</button>
