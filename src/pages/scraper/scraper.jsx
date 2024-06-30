@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import Header from '../widgets/header';
+import Header from '../../widgets/header';
 
 export default function ScraperDetails() {
     const navigate = useNavigate();
@@ -232,7 +232,9 @@ export default function ScraperDetails() {
                     <tbody className="bg-zinc-950 rounded-b-lg text-white ring-1 ring-white ring-inset">
                         {outputs.map((output) => (
                             <tr key={output.id}>
-                                <td className="px-4 py-3">{output.id}</td>
+                                <td className="px-4 py-3 hover:cursor-pointer" onClick={
+                                    () => navigate(`/scraper/output/${output.id}`)
+                                }>{output.id}</td>
                                 <td className="px-4 py-3">
                                     {
                                         new Date(output.created_at).toLocaleDateString('en-US', {
