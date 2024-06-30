@@ -15,7 +15,6 @@ export default function Output() {
     }
 
     async function getSentimentAnalysis() {
-        console.log('Sending scraperOutput:', scraperOutput);
         const response = await fetch(`https://web-scraping-demo-8p7f.onrender.com/scraper/sentiment`, {
             method: 'POST',
             headers: {
@@ -25,8 +24,18 @@ export default function Output() {
         });
         const data = await response.json();
         setSentimentAnalysis(data);
-        console.log(data);
     }
+
+    const getCellColor = (score) => {
+        if (score > 0) {
+            return 'bg-green-900'; // Positive sentiment
+        } else if (score < 0) {
+            return 'bg-red-900'; // Negative sentiment
+        } else {
+            return 'bg-zinc-900'; // Neutral sentiment
+        }
+    };
+    
 
     async function downloadCSV(oid) {
         const data = scraperOutput;
@@ -89,12 +98,22 @@ export default function Output() {
                                     ))}
                                 </tr>
                             </thead>
-                            <tbody className="bg-zinc-950 rounded-b-lg text-white ring-1 ring-white ring-inset">
+                            <tbody className="bg-zinc-900 rounded-b-lg text-white">
                                 {scraperOutput.map((item, index) => (
                                     <tr key={index}>
-                                        {keys.map(key => (
-                                            <td key={key} className="px-4 py-3">{item[key]}</td>
-                                        ))}
+                                        {keys.map(key => {
+                                            const sentiment = sentimentAnalysis.length > 0 && sentimentAnalysis[index] && sentimentAnalysis[index].find(s => s.field === key);
+                                            const cellColor = sentiment ? getCellColor(sentiment.score) : '';
+                                            return (
+                                                <td key={key} className={`px-4 py-3 ${cellColor}`}>
+                                                    {item[key]} {
+                                                        sentiment && (
+                                                            <span className="text-xs ml-2">{sentiment.score}</span>
+                                                        )
+                                                    }
+                                                </td>
+                                            );
+                                        })}
                                     </tr>
                                 ))}
                             </tbody>
