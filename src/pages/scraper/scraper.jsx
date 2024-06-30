@@ -233,13 +233,12 @@ export default function ScraperDetails() {
                             <th className="px-4 py-2 text-black">ID</th>
                             <th className="px-4 py-2 text-black">Date and Time</th>
                             <th className="px-4 py-2 text-black">Download</th>
-                            <th className="px-4 py-2 text-black"></th>
                         </tr>
                     </thead>
                     <tbody className="bg-zinc-950 rounded-b-lg text-white ring-1 ring-white ring-inset">
                         {outputs.map((output) => (
                             <tr key={output.id}>
-                                <td className="px-4 py-3 hover:cursor-pointer" onClick={
+                                <td className="px-4 py-3 hover:cursor-pointer hover:underline" onClick={
                                     () => navigate(`/scraper/output/${output.id}`)
                                 }>{output.id}</td>
                                 <td className="px-4 py-3">
@@ -264,9 +263,6 @@ export default function ScraperDetails() {
                                     <button className="text-red-500 hover:underline cursor-pointer" onClick={
                                         () => downloadXML(output.id)
                                     }>XML</button>
-                                </td>
-                                <td className="px-4 py-3">
-                                    <a href={`https://web-scraping-demo-8p7f.onrender.com/scraper/output/${output.id}`} target='_blank' className="hover:underline cursor-pointer">Preview</a>
                                 </td>
                             </tr>
                         ))}
