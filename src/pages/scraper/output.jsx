@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import Header from '../../widgets/header';
 
 export default function Output() {
     const { id } = useParams();
@@ -83,6 +84,7 @@ export default function Output() {
 
     return (
         <div>
+            <Header />
             {scraperOutput && !loading ? (
                 <div className="mt-6 flex justify-center">
                     <div className="overflow-x-auto">
