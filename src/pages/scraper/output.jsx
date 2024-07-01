@@ -85,53 +85,55 @@ export default function Output() {
     return (
         <div>
             <Header />
-            {scraperOutput && !loading ? (
-                <div className="mt-6 flex justify-center">
-                    <div className="overflow-x-auto">
-                        <div className="flex justify-center">
-                            <button className="bg-blue-600 text-white font-bold py-2 px-4 mr-2 rounded-md mb-4" onClick={getSentimentAnalysis}>Sentiment Analysis</button>
-                            <button className="bg-orange-600 text-white font-bold py-2 px-4 mr-2 rounded-md mb-4" onClick={() => downloadJSON(id)}>Download JSON</button>
-                            <button className="bg-green-700 text-white font-bold py-2 px-4 mr-2 rounded-md mb-4" onClick={() => downloadCSV(id)}>Download CSV</button>
-                            <button className="bg-red-600 text-white font-bold py-2 px-4 rounded-md mb-4" onClick={() => downloadXML(id)}>Download XML</button>
-                        </div>
-                        <table className="table-auto rounded-md w-full overflow-hidden">
-                            <thead className="bg-white">
-                                <tr>
-                                    {keys.map(key => (
-                                        <th key={key} className="px-4 py-2 text-black">{key}</th>
-                                    ))}
-                                </tr>
-                            </thead>
-                            <tbody className="bg-zinc-900 rounded-b-lg text-white">
-                                {scraperOutput.map((item, index) => (
-                                    <tr key={index}>
-                                        {keys.map(key => {
-                                            const sentiment = sentimentAnalysis.length > 0 && sentimentAnalysis[index] && sentimentAnalysis[index].find(s => s.field === key);
-                                            const cellColor = sentiment ? getCellColor(sentiment.score) : '';
-                                            return (
-                                                <td key={key} className={`px-4 py-3 ${cellColor}`}>
-                                                    {item[key]} {
-                                                        sentiment && (
-                                                            <span className="text-xs ml-2">{sentiment.score}</span>
-                                                        )
-                                                    }
-                                                </td>
-                                            );
-                                        })}
+            <div className='pt-12'>
+                {scraperOutput && !loading ? (
+                    <div className="mt-6 flex justify-center">
+                        <div className="overflow-x-auto">
+                            <div className="flex justify-center">
+                                <button className="bg-blue-600 text-white font-bold py-2 px-4 mr-2 rounded-md mb-4" onClick={getSentimentAnalysis}>Sentiment Analysis</button>
+                                <button className="bg-orange-600 text-white font-bold py-2 px-4 mr-2 rounded-md mb-4" onClick={() => downloadJSON(id)}>Download JSON</button>
+                                <button className="bg-green-700 text-white font-bold py-2 px-4 mr-2 rounded-md mb-4" onClick={() => downloadCSV(id)}>Download CSV</button>
+                                <button className="bg-red-600 text-white font-bold py-2 px-4 rounded-md mb-4" onClick={() => downloadXML(id)}>Download XML</button>
+                            </div>
+                            <table className="table-auto rounded-md w-full overflow-hidden">
+                                <thead className="bg-white">
+                                    <tr>
+                                        {keys.map(key => (
+                                            <th key={key} className="px-4 py-2 text-black">{key}</th>
+                                        ))}
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody className="bg-zinc-900 rounded-b-lg text-white">
+                                    {scraperOutput.map((item, index) => (
+                                        <tr key={index}>
+                                            {keys.map(key => {
+                                                const sentiment = sentimentAnalysis.length > 0 && sentimentAnalysis[index] && sentimentAnalysis[index].find(s => s.field === key);
+                                                const cellColor = sentiment ? getCellColor(sentiment.score) : '';
+                                                return (
+                                                    <td key={key} className={`px-4 py-3 ${cellColor}`}>
+                                                        {item[key]} {
+                                                            sentiment && (
+                                                                <span className="text-xs ml-2">{sentiment.score}</span>
+                                                            )
+                                                        }
+                                                    </td>
+                                                );
+                                            })}
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
-            ) : (
-                <div class="flex justify-center items-center h-screen">
-                    <div class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-e-transparent text-warning motion-reduce:animate-[spin_2s_linear_infinite]"
-                        role="status">
-                        <span class="absolute -m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 clip:rect(0,0,0,0)">Loading...</span>
+                ) : (
+                    <div class="flex justify-center items-center h-screen">
+                        <div class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-e-transparent text-warning motion-reduce:animate-[spin_2s_linear_infinite]"
+                            role="status">
+                            <span class="absolute -m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 clip:rect(0,0,0,0)">Loading...</span>
+                        </div>
                     </div>
-                </div>
-            )}
+                )}
+            </div>
         </div>
     );
 }
