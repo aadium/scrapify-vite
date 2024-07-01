@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
+
+import { requestGroqAi } from '../../utils/groq';
+import sparkles from '../../assets/sparkler.png';
 import Header from '../../widgets/header';
+import Modal from '../../utils/modal';
 
 export default function Output() {
     const { id } = useParams();
@@ -8,6 +13,8 @@ export default function Output() {
     const [scraperOutput, setScraperOutput] = useState([]);
     const [sentimentAnalysis, setSentimentAnalysis] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [showDialog, setShowDialog] = useState(false);
+    const [markdownContent, setMarkdownContent] = useState('');
 
     async function getScraperOutput() {
         const response = await fetch(`https://web-scraping-demo-8p7f.onrender.com/scraper/output/${id}`, {
@@ -32,14 +39,23 @@ export default function Output() {
 
     const getCellColor = (score) => {
         if (score > 0) {
-            return 'bg-green-900'; // Positive sentiment
+            return 'bg-green-900';
         } else if (score < 0) {
-            return 'bg-red-900'; // Negative sentiment
+            return 'bg-red-900';
         } else {
-            return 'bg-zinc-900'; // Neutral sentiment
+            return 'bg-zinc-900';
         }
     };
 
+    async function getSummary(data) {
+        if (markdownContent === '') {
+            const jsonDataString = JSON.stringify(data, null, 2);
+            const prompt = `Please summarize the below data and categorize it if possible:\n\n${jsonDataString}`;
+            const summary = await requestGroqAi(prompt);
+            setMarkdownContent(summary);
+        }
+        setShowDialog(true);
+    }
 
     async function downloadCSV(oid) {
         const data = scraperOutput;
@@ -127,7 +143,11 @@ export default function Output() {
                     <div className="mt-6 flex justify-center">
                         <div className="overflow-x-auto">
                             <div className="flex justify-center">
-                                <button className="bg-blue-600 text-white font-bold py-2 px-4 mr-2 rounded-md mb-4" onClick={getSentimentAnalysis}>Sentiment Analysis</button>
+                                <button className="bg-white text-black font-bold py-2 px-4 mr-2 rounded-md mb-4" onClick={() => getSummary(scraperOutput)}>
+                                    <img src={sparkles} alt="Summarize" className="inline-block mr-2" style={{ width: '25px', height: '25px' }} /> Summarization
+                                </button>
+                                <button className="bg-white text-black font-bold py-2 px-4 mr-2 rounded-md mb-4" onClick={getSentimentAnalysis}>
+                                    <img src={sparkles} alt="Summarize" className="inline-block mr-2" style={{ width: '25px', height: '25px' }} /> Sentiment Analysis</button>
                                 <button className="bg-orange-600 text-white font-bold py-2 px-4 mr-2 rounded-md mb-4" onClick={() => downloadJSON(id)}>Download JSON</button>
                                 <button className="bg-green-700 text-white font-bold py-2 px-4 mr-2 rounded-md mb-4" onClick={() => downloadCSV(id)}>Download CSV</button>
                                 <button className="bg-red-600 text-white font-bold py-2 px-4 rounded-md mb-4" onClick={() => downloadXML(id)}>Download XML</button>
@@ -160,13 +180,18 @@ export default function Output() {
                                     ))}
                                 </tbody>
                             </table>
+                            {showDialog && (
+                                <Modal onClose={() => setShowDialog(false)}>
+                                    <ReactMarkdown>{markdownContent}</ReactMarkdown>
+                                </Modal>
+                            )}
                         </div>
                     </div>
                 ) : (
-                    <div class="flex justify-center items-center h-screen">
-                        <div class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-e-transparent text-warning motion-reduce:animate-[spin_2s_linear_infinite]"
+                    <div className="flex justify-center items-center h-screen">
+                        <div className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-e-transparent text-warning motion-reduce:animate-[spin_2s_linear_infinite]"
                             role="status">
-                            <span class="absolute -m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 clip:rect(0,0,0,0)">Loading...</span>
+                            <span className="absolute -m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 clip:rect(0,0,0,0)">Loading...</span>
                         </div>
                     </div>
                 )}

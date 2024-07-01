@@ -188,10 +188,10 @@ export default function ScraperDetails() {
             <div className="bg-zinc-950 border border-2 border-white p-7 rounded-md shadow max-w-md">
                 {
                     loading ? (
-                        <div class="flex justify-center items-center h-max">
-                            <div class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-e-transparent text-warning motion-reduce:animate-[spin_2s_linear_infinite]"
+                        <div className="flex justify-center items-center h-max">
+                            <div className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-e-transparent text-warning motion-reduce:animate-[spin_2s_linear_infinite]"
                                 role="status">
-                                <span class="absolute -m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 clip:rect(0,0,0,0)">Loading...</span>
+                                <span className="absolute -m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 clip:rect(0,0,0,0)">Loading...</span>
                             </div>
                         </div>
                     ) : (
@@ -228,10 +228,10 @@ export default function ScraperDetails() {
                                     running ? null : runScraper
                                 }>
                                     {running ? (
-                                        <div class="inline-block h-5 w-5 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-warning motion-reduce:animate-[spin_2s_linear_infinite]"
+                                        <div className="inline-block h-5 w-5 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-warning motion-reduce:animate-[spin_2s_linear_infinite]"
                                             role="status">
                                             <span
-                                                class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+                                                className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
                                             >Loading...</span>
                                         </div>
                                     ) : (
@@ -249,10 +249,10 @@ export default function ScraperDetails() {
             <h2 className="mt-6 text-center text-3xl font-extrabold text-white">Scrape Results</h2>
             {
                 outputLoading ? (
-                    <div class="flex justify-center items-center h-max mt-5">
-                        <div class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-e-transparent text-warning motion-reduce:animate-[spin_2s_linear_infinite]"
+                    <div className="flex justify-center items-center h-max mt-5">
+                        <div className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-e-transparent text-warning motion-reduce:animate-[spin_2s_linear_infinite]"
                             role="status">
-                            <span class="absolute -m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 clip:rect(0,0,0,0)">Loading...</span>
+                            <span className="absolute -m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 clip:rect(0,0,0,0)">Loading...</span>
                         </div>
                     </div>
                 ) : (
