@@ -90,10 +90,10 @@ export default function Dashboard() {
                                 <tbody className="bg-zinc-950 rounded-b-lg text-white ring-1 ring-white ring-inset">
                                     <tr>
                                         <td colSpan="3" className="px-4 py-3">
-                                            <div class="flex justify-center items-center h-max">
-                                                <div class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-e-transparent text-warning motion-reduce:animate-[spin_2s_linear_infinite]"
+                                            <div className="flex justify-center items-center h-max">
+                                                <div className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-e-transparent text-warning motion-reduce:animate-[spin_2s_linear_infinite]"
                                                     role="status">
-                                                    <span class="absolute -m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 clip:rect(0,0,0,0)">Loading...</span>
+                                                    <span className="absolute -m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 clip:rect(0,0,0,0)">Loading...</span>
                                                 </div>
                                             </div>
                                         </td>
