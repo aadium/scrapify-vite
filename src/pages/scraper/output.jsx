@@ -15,6 +15,8 @@ export default function Output() {
     const [loading, setLoading] = useState(true);
     const [showDialog, setShowDialog] = useState(false);
     const [markdownContent, setMarkdownContent] = useState('');
+    const [summarizerLoading, setSummarizerLoading] = useState(false);
+    const [sentimentLoading, setSentimentLoading] = useState(false);
 
     async function getScraperOutput() {
         const response = await fetch(`https://web-scraping-demo-8p7f.onrender.com/scraper/output/${id}`, {
@@ -26,6 +28,7 @@ export default function Output() {
     }
 
     async function getSentimentAnalysis() {
+        setSentimentLoading(true);
         const response = await fetch(`https://web-scraping-demo-8p7f.onrender.com/scraper/sentiment`, {
             method: 'POST',
             headers: {
@@ -35,6 +38,7 @@ export default function Output() {
         });
         const data = await response.json();
         setSentimentAnalysis(data);
+        setSentimentLoading(false);
     }
 
     const getCellColor = (score) => {
@@ -48,12 +52,14 @@ export default function Output() {
     };
 
     async function getSummary(data) {
+        setSummarizerLoading(true);
         if (markdownContent === '') {
             const jsonDataString = JSON.stringify(data, null, 2);
-            const prompt = `Please summarize the below data and categorize it if possible:\n\n${jsonDataString}`;
+            const prompt = `Summarize the below data and also categorize it if possible:\n\n${jsonDataString}`;
             const summary = await requestGroqAi(prompt);
             setMarkdownContent(summary);
         }
+        setSummarizerLoading(false);
         setShowDialog(true);
     }
 
@@ -144,10 +150,37 @@ export default function Output() {
                         <div className="overflow-x-auto">
                             <div className="flex justify-center">
                                 <button className="bg-white text-black font-bold py-2 px-4 mr-2 rounded-md mb-4" onClick={() => getSummary(scraperOutput)}>
-                                    <img src={sparkles} alt="Summarize" className="inline-block mr-2" style={{ width: '25px', height: '25px' }} /> Summarization
+                                    {
+                                        summarizerLoading ? (
+                                            <div className="flex justify-center items-center h-max">
+                                                <div className="inline-block h-5 w-5 animate-spin rounded-full border-4 border-solid border-current border-e-transparent text-warning motion-reduce:animate-[spin_2s_linear_infinite]"
+                                                    role="status">
+                                                    <span className="absolute -m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 clip:rect(0,0,0,0)">Loading...</span>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div>
+                                                <img src={sparkles} alt="Summarize" className="inline-block mr-2" style={{ width: '25px', height: '25px' }} /> Summarization
+                                            </div>
+                                        )
+                                    }
                                 </button>
                                 <button className="bg-white text-black font-bold py-2 px-4 mr-2 rounded-md mb-4" onClick={getSentimentAnalysis}>
-                                    <img src={sparkles} alt="Summarize" className="inline-block mr-2" style={{ width: '25px', height: '25px' }} /> Sentiment Analysis</button>
+                                    {
+                                        sentimentLoading ? (
+                                            <div className="flex justify-center items-center h-max">
+                                                <div className="inline-block h-5 w-5 animate-spin rounded-full border-4 border-solid border-current border-e-transparent text-warning motion-reduce:animate-[spin_2s_linear_infinite]"
+                                                    role="status">
+                                                    <span className="absolute -m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 clip:rect(0,0,0,0)">Loading...</span>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div>
+                                                <img src={sparkles} alt="Sentiment" className="inline-block mr-2" style={{ width: '25px', height: '25px' }} /> Sentiment Analysis
+                                            </div>
+                                        )
+                                    }
+                                </button>
                                 <button className="bg-orange-600 text-white font-bold py-2 px-4 mr-2 rounded-md mb-4" onClick={() => downloadJSON(id)}>Download JSON</button>
                                 <button className="bg-green-700 text-white font-bold py-2 px-4 mr-2 rounded-md mb-4" onClick={() => downloadCSV(id)}>Download CSV</button>
                                 <button className="bg-red-600 text-white font-bold py-2 px-4 rounded-md mb-4" onClick={() => downloadXML(id)}>Download XML</button>
