@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 export default function SignUpPage() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-    function handleSubmit(event) {
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        setLoading(true);
         const data = new FormData(event.target);
         const email = data.get('email');
         const password = data.get('password');
@@ -15,24 +15,24 @@ export default function SignUpPage() {
             alert('Passwords do not match: password: ' + password + ' confirmPassword: ' + confirmPassword);
             return;
         }
-        fetch('https://web-scraping-demo-8p7f.onrender.com/auth/signup', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, password }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.error) {
-                    alert(data.error);
-                } else {
-                    alert('Account created');
-                    navigate('/signin');
-                }
+        try {
+            setLoading(true);
+            const response = await fetch('https://web-scraping-demo-8p7f.onrender.com/auth/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
             });
-        setLoading(false);
-    }
+            navigate('/signin');
+        } catch (error) {
+            console.error('Signup failed:', error);
+            setLoading(false);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <div className="min-h-screen flex items-center justify-center bg-black">
             <div className="max-w-md w-full space-y-8">
@@ -57,7 +57,20 @@ export default function SignUpPage() {
                     </div>
                     <div>
                         <button type="submit" className="group transition relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700">
-                            {loading ? <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-l-2 border-white"></div> : 'Sign up'}
+                            {
+                                loading ? (
+                                    <div className="flex justify-center items-center h-max">
+                                        <div className="inline-block h-5 w-5 animate-spin rounded-full border-4 border-solid border-current border-e-transparent text-warning motion-reduce:animate-[spin_2s_linear_infinite]"
+                                            role="status">
+                                            <span className="absolute -m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 clip:rect(0,0,0,0)">Loading...</span>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div>
+                                        Sign Up
+                                    </div>
+                                )
+                            }
                         </button>
                     </div>
                 </form>

@@ -4,29 +4,32 @@ import { useNavigate } from 'react-router-dom';
 export default function SignInPage() {
     const [loading, setLoading] = useState(false);
     const nav = useNavigate();
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
-        setLoading(true);
         const data = new FormData(event.target);
         const email = data.get('email');
         const password = data.get('password');
-        fetch('https://web-scraping-demo-8p7f.onrender.com/auth/signin', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, password }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.error) {
-                    alert(data.error);
-                } else {
-                    localStorage.setItem('token', JSON.stringify(data.token));
-                    nav('/dashboard');
-                }
+        try {
+            setLoading(true);
+            const response = await fetch('https://web-scraping-demo-8p7f.onrender.com/auth/signin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
             });
-        setLoading(false);
+            const data = await response.json();
+            if (data.error) {
+                alert(data.error);
+            } else {
+                localStorage.setItem('token', JSON.stringify(data.token));
+                nav('/dashboard');
+            }
+        } catch (error) {
+            alert('An error occurred. Please try again.');
+        } finally {
+            setLoading(false);
+        }
     }
     return (
         <div className="min-h-screen flex items-center justify-center bg-black">
@@ -48,7 +51,20 @@ export default function SignInPage() {
                     </div>
                     <div>
                         <button type="submit" className="group transition relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700">
-                            {loading ? <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-l-2 border-white"></div> : 'Sign in'}
+                            {
+                                loading ? (
+                                    <div className="flex justify-center items-center h-max">
+                                        <div className="inline-block h-5 w-5 animate-spin rounded-full border-4 border-solid border-current border-e-transparent text-warning motion-reduce:animate-[spin_2s_linear_infinite]"
+                                            role="status">
+                                            <span className="absolute -m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 clip:rect(0,0,0,0)">Loading...</span>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div>
+                                        Sign In
+                                    </div>
+                                )
+                            }
                         </button>
                     </div>
                 </form>
