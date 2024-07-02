@@ -5,6 +5,7 @@ import Landing from "./pages/landing";
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import ScraperDetails from "./pages/scraper/scraper";
 import Output from "./pages/scraper/output";
+import AddScraper from "./pages/addScraper";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard/add" element={<AddScraper />} />
         <Route path="/scraper/:id" element={<ScraperDetails />} />
         <Route path="/scraper/output/:id" element={<Output />} />
       </Routes>

@@ -207,7 +207,7 @@ export default function ScraperDetails() {
                                     }).toLowerCase()
                                 }
                             </p>
-                            <a href={scraperDetails.url} target='_blank' className="text-orange-500 hover:underline">{scraperDetails.url}</a>
+                            <a href={scraperDetails.url} target="_blank" rel="noopener noreferrer" className="text-orange-500 hover:underline break-words">{scraperDetails.url}</a>
                             <div className="mt-4">
                                 <h2 className="text-xl font-semibold text-white">Selectors</h2>
                                 {scraperDetails.selectors && (
