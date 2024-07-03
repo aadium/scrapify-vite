@@ -14,7 +14,7 @@ export default function ScraperDetails() {
 
     function runScraper() {
         setRunning(true);
-        fetch(`https://web-scraping-demo-8p7f.onrender.com/scraper/start/${id}`, {
+        fetch(`${import.meta.env.VITE_API_URL}/scraper/start/${id}`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${bearerToken}`,
@@ -38,7 +38,7 @@ export default function ScraperDetails() {
     }
 
     function getScraperDetails() {
-        fetch(`https://web-scraping-demo-8p7f.onrender.com/scraper/${id}`, {
+        fetch(`${import.meta.env.VITE_API_URL}/scraper/${id}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${bearerToken}`,
@@ -64,7 +64,7 @@ export default function ScraperDetails() {
         if (!confirmDelete) {
             return;
         }
-        fetch(`https://web-scraping-demo-8p7f.onrender.com/scraper/${id}`, {
+        fetch(`${import.meta.env.VITE_API_URL}/scraper/${id}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${bearerToken}`,
@@ -85,7 +85,7 @@ export default function ScraperDetails() {
     }
 
     function getOutputs() {
-        fetch(`https://web-scraping-demo-8p7f.onrender.com/scraper/outputs/${id}`, {
+        fetch(`${import.meta.env.VITE_API_URL}/scraper/outputs/${id}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${bearerToken}`,
@@ -107,7 +107,7 @@ export default function ScraperDetails() {
     }
 
     async function downloadCSV(oid) {
-        const data = await fetch(`https://web-scraping-demo-8p7f.onrender.com/scraper/output/${oid}`, {
+        const data = await fetch(`${import.meta.env.VITE_API_URL}/scraper/output/${oid}`, {
             method: 'GET'
         })
             .then(response => response.json())
@@ -128,7 +128,7 @@ export default function ScraperDetails() {
     }
 
     async function downloadXML(oid) {
-        const data = await fetch(`https://web-scraping-demo-8p7f.onrender.com/scraper/output/${oid}`, {
+        const data = await fetch(`${import.meta.env.VITE_API_URL}/scraper/output/${oid}`, {
             method: 'GET'
         })
             .then(response => response.json())
@@ -150,7 +150,7 @@ export default function ScraperDetails() {
             console.error('Error parsing token:', e);
         }
         if (token) {
-            fetch('https://web-scraping-demo-8p7f.onrender.com/auth/verifyToken', {
+            fetch(`${import.meta.env.VITE_API_URL}/auth/verifyToken`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

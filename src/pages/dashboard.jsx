@@ -9,7 +9,7 @@ export default function Dashboard() {
     const [loading, setLoading] = useState(true);
 
     function getScrapers() {
-        fetch('https://web-scraping-demo-8p7f.onrender.com/scraper', {
+        fetch(`${import.meta.env.VITE_API_URL}/scraper`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${bearerToken}`,
@@ -41,7 +41,7 @@ export default function Dashboard() {
         if (!token) {
             navigate('/signin');
         }
-        fetch('https://web-scraping-demo-8p7f.onrender.com/auth/verifyToken', {
+        fetch(`${import.meta.env.VITE_API_URL}/auth/verifyToken`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

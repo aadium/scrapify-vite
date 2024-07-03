@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
+import { useParams } from 'react-router-dom';
 
-import { requestGroqAi } from '../../utils/groq';
 import sparkles from '../../assets/sparkler.png';
-import Header from '../../widgets/header';
+import { requestGroqAi } from '../../utils/groq';
 import Modal from '../../utils/modal';
+import Header from '../../widgets/header';
 
 export default function Output() {
     const { id } = useParams();
@@ -19,7 +19,7 @@ export default function Output() {
     const [sentimentLoading, setSentimentLoading] = useState(false);
 
     async function getScraperOutput() {
-        const response = await fetch(`https://web-scraping-demo-8p7f.onrender.com/scraper/output/${id}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/scraper/output/${id}`, {
             method: 'GET',
         });
         const data = await response.json();
@@ -29,7 +29,7 @@ export default function Output() {
 
     async function getSentimentAnalysis() {
         setSentimentLoading(true);
-        const response = await fetch(`https://web-scraping-demo-8p7f.onrender.com/scraper/sentiment`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/scraper/sentiment`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -110,7 +110,7 @@ export default function Output() {
         if (!token) {
             navigate('/signin');
         }
-        fetch('https://web-scraping-demo-8p7f.onrender.com/auth/verifyToken', {
+        fetch(`${import.meta.env.VITE_API_URL}/auth/verifyToken`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
