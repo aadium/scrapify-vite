@@ -9,35 +9,34 @@ export default function Dashboard() {
     const [scrapers, setScrapers] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    function getScrapers() {
-        fetch(`${import.meta.env.VITE_API_URL}/scraper`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${bearerToken}`,
-            },
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok: ' + response.statusText);
-                }
-                return response.json();
-            })
-            .then((data) => {
-                setScrapers(data);
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error('Error fetching scrapers:', error);
-            });
-    }
-
     useAuth(setBearerToken);
 
     useEffect(() => {
+        const getScrapers = () => {
+            fetch(`${import.meta.env.VITE_API_URL}/scraper`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${bearerToken}`,
+                },
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    setScrapers(data);
+                    setLoading(false);
+                })
+                .catch((error) => {
+                    console.error('Error fetching scrapers:', error);
+                });
+        };
         if (bearerToken !== '') {
             getScrapers();
         }
-    }, [getScrapers, bearerToken]);
+    }, [bearerToken]);
 
     return (
         <div className="min-h-screen flex flex-col py-2">
@@ -92,17 +91,6 @@ export default function Dashboard() {
                     </button>
                 </div>
             </main>
-
-            <footer className="flex h-16 w-full items-center justify-center">
-                <a
-                    href="#top"
-                    aria-label="Back to top"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 11l7-7 7 7M5 19l7-7 7 7" />
-                    </svg>
-                </a>
-            </footer>
         </div>
     );
 }
