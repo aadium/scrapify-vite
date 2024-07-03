@@ -29,7 +29,7 @@ const useAuth = (setBearerToken) => {
             }
             return response.json();
         })
-        .then(data => {
+        .then(() => {
             setBearerToken(token);
         })
         .catch(error => {
