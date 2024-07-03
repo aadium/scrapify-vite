@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Header from '../../widgets/header';
+import useAuth from '../../utils/useAuth';
 
 export default function ScraperDetails() {
     const navigate = useNavigate();
@@ -141,39 +142,7 @@ export default function ScraperDetails() {
         downloadLink.click();
     }
 
-    useEffect(() => {
-        const tokenString = localStorage.getItem('token');
-        let token = null;
-        try {
-            token = JSON.parse(tokenString);
-        } catch (e) {
-            console.error('Error parsing token:', e);
-        }
-        if (token) {
-            fetch(`${import.meta.env.VITE_API_URL}/auth/verifyToken`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Token validation failed: ' + response.statusText);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    setBearerToken(token);
-                })
-                .catch(error => {
-                    console.error('Error validating token:', error);
-                    navigate('/signin');
-                });
-        } else {
-            navigate('/signin');
-        }
-    }, []);
+    useAuth(setBearerToken);
 
     useEffect(() => {
         if (bearerToken !== '') {
