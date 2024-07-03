@@ -11,7 +11,7 @@ export default function SignInPage() {
         const password = data.get('password');
         try {
             setLoading(true);
-            const response = await fetch('https://web-scraping-demo-8p7f.onrender.com/auth/signin', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/signin`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

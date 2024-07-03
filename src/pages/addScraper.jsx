@@ -12,7 +12,7 @@ export default function AddScraper() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const endpoint = 'https://web-scraping-demo-8p7f.onrender.com/scraper/create';
+        const endpoint = `${import.meta.env.VITE_API_URL}/scraper/create`;
         const payload = { name, url, selectors };
         const token = bearerToken;
 
@@ -78,7 +78,7 @@ export default function AddScraper() {
             console.error('Error parsing token:', e);
         }
         if (token) {
-            fetch('https://web-scraping-demo-8p7f.onrender.com/auth/verifyToken', {
+            fetch(`${import.meta.env.VITE_API_URL}/auth/verifyToken`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -33,7 +33,7 @@ This project is a web scraping application built using React.js with Vite, desig
     # or
     yarn install
     ```
-4. Go to this website: [GroqCloud](https://console.groq.com/playground). Create an account there, and then generate an API key. Create a <code>.env</code> file in the root directory, create an environment variable named <code>VITE_GROQ_API</code>, and add that API key as the value
+4. Go to this website: [GroqCloud](https://console.groq.com/playground). Create an account there, and then generate an API key. Create a <code>.env</code> file in the root directory, create an environment variable named <code>VITE_GROQ_API</code>, and add that API key as the value. Also, create another variable named <code>VITE_API_URL</code>, and enter this as the value: [https://web-scraping-demo-8p7f.onrender.com](https://web-scraping-demo-8p7f.onrender.com).
 5. Start the development server
     ```bash
     npm run dev
