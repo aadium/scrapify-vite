@@ -42,7 +42,7 @@ This project is a web scraping application built using React.js with Vite, desig
     ```
 
 ### Contributing
-Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated. Check the [CONTRIBUTING](CONTRIBUTING) file for more details
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated. Check the [CONTRIBUTING](CONTRIBUTING.md) file for more details
 1. Create an issue explaining your intended changes and wait till you are assigned the issue, or request to be assigned to an existing issue.
 2. Fork the Project
 3. Create your own branch (<code>git checkout -b feature/AmazingFeature</code>)
