@@ -30,7 +30,6 @@ const useAuth = (setBearerToken) => {
             return response.json();
         })
         .then(data => {
-            console.log(data.message);
             setBearerToken(token);
         })
         .catch(error => {
