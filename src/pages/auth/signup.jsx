@@ -17,7 +17,7 @@ export default function SignUpPage() {
         }
         try {
             setLoading(true);
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/signup`, {
+            await fetch(`${import.meta.env.VITE_API_URL}/auth/signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -44,15 +44,15 @@ export default function SignUpPage() {
                     <div className="rounded-md shadow-sm -space-y-px">
                         <div>
                             <label htmlFor="email-address" className="sr-only">Email address</label>
-                            <input id="email-address" name="email" type="email" autoComplete="email" required className="mb-4 appearance-none rounded relative block w-full px-3 py-2 border border-white bg-black placeholder-gray-500 text-white rounded focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm" placeholder="Email address" />
+                            <input id="email-address" name="email" type="email" autoComplete="email" required className="mb-4 appearance-none rounded relative block w-full px-3 py-2 border border-white bg-black placeholder-gray-500 text-white focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm" placeholder="Email address" />
                         </div>
                         <div>
                             <label htmlFor="password" className="sr-only">Password</label>
-                            <input id="password" name="password" type="password" autoComplete="current-password" required className="mb-4 appearance-none rounded relative block w-full px-3 py-2 border border-white bg-black placeholder-gray-500 text-white rounded focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm" placeholder="Password" />
+                            <input id="password" name="password" type="password" autoComplete="current-password" required className="mb-4 appearance-none rounded relative block w-full px-3 py-2 border border-white bg-black placeholder-gray-500 text-white focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm" placeholder="Password" />
                         </div>
                         <div>
                             <label htmlFor="password" className="sr-only">Confirm Password</label>
-                            <input id="confirmPassword" name="confirmPassword" type="password" autoComplete="current-password" required className="appearance-none rounded relative block w-full px-3 py-2 border border-white bg-black placeholder-gray-500 text-white rounded focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm" placeholder="Confirm Password" />
+                            <input id="confirmPassword" name="confirmPassword" type="password" autoComplete="current-password" required className="appearance-none rounded relative block w-full px-3 py-2 border border-white bg-black placeholder-gray-500 text-white focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm" placeholder="Confirm Password" />
                         </div>
                     </div>
                     <div>

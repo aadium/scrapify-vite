@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import ReactMarkdown from 'react-markdown';
-import { useParams } from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 
 import sparkles from '../../assets/sparkler.png';
-import { requestGroqAi } from '../../utils/groq';
+import {requestGroqAi} from '../../utils/groq';
 import Modal from '../../utils/modal';
 import Header from '../../widgets/header';
 import useAuth from '../../utils/useAuth';
@@ -18,15 +18,6 @@ export default function Output() {
     const [markdownContent, setMarkdownContent] = useState('');
     const [summarizerLoading, setSummarizerLoading] = useState(false);
     const [sentimentLoading, setSentimentLoading] = useState(false);
-
-    async function getScraperOutput() {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/scraper/output/${id}`, {
-            method: 'GET',
-        });
-        const data = await response.json();
-        setScraperOutput(data);
-        setLoading(false);
-    }
 
     async function getSentimentAnalysis() {
         setSentimentLoading(true);
@@ -82,8 +73,7 @@ export default function Output() {
     }
 
     async function downloadXML(oid) {
-        const data = scraperOutput;
-        const xml = data.map(row => `<row>${Object.entries(row).map(([key, value]) => `<${key}>${value}</${key}>`).join('')}</row>`).join('\n');
+        const xml = scraperOutput.map(row => `<row>${Object.entries(row).map(([key, value]) => `<${key}>${value}</${key}>`).join('')}</row>`).join('\n');
         const blob = new Blob([xml], { type: 'text/xml' });
         const downloadLink = document.createElement('a');
         downloadLink.href = URL.createObjectURL(blob);
@@ -92,8 +82,7 @@ export default function Output() {
     }
 
     async function downloadJSON(oid) {
-        const data = scraperOutput;
-        const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+        const blob = new Blob([JSON.stringify(scraperOutput)], { type: 'application/json' });
         const downloadLink = document.createElement('a');
         downloadLink.href = URL.createObjectURL(blob);
         downloadLink.download = `${oid}.json`;
@@ -103,10 +92,18 @@ export default function Output() {
     useAuth(setBearerToken);
 
     useEffect(() => {
-        if (bearerToken !== '') {
-            getScraperOutput();
+        async function getScraperOutput() {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/scraper/output/${id}`, {
+                method: 'GET',
+            });
+            const data = await response.json();
+            setScraperOutput(data);
+            setLoading(false);
         }
-    }, [getScraperOutput, bearerToken]);
+        if (bearerToken !== '') {
+            getScraperOutput().then(r => r);
+        }
+    }, [bearerToken, id]);
 
     const keys = scraperOutput && scraperOutput.length > 0 ? Object.keys(scraperOutput[0]) : [];
 

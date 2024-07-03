@@ -38,28 +38,6 @@ export default function ScraperDetails() {
             });
     }
 
-    function getScraperDetails() {
-        fetch(`${import.meta.env.VITE_API_URL}/scraper/${id}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${bearerToken}`,
-            },
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok: ' + response.statusText);
-                }
-                return response.json();
-            })
-            .then((data) => {
-                setScraperDetails(data);
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error('Error fetching scraper details:', error);
-            });
-    }
-
     function deleteScraper() {
         const confirmDelete = confirm('Are you sure you want to delete this scraper?');
         if (!confirmDelete) {
@@ -77,33 +55,11 @@ export default function ScraperDetails() {
                 }
                 return response.json();
             })
-            .then((data) => {
+            .then(() => {
                 navigate('/dashboard');
             })
             .catch((error) => {
                 console.error('Error deleting scraper:', error);
-            });
-    }
-
-    function getOutputs() {
-        fetch(`${import.meta.env.VITE_API_URL}/scraper/outputs/${id}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${bearerToken}`,
-            },
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok: ' + response.statusText);
-                }
-                return response.json();
-            })
-            .then((data) => {
-                setOutputs(data);
-                setOutputLoading(false);
-            })
-            .catch((error) => {
-                console.error('Error fetching outputs:', error);
             });
     }
 
@@ -145,16 +101,58 @@ export default function ScraperDetails() {
     useAuth(setBearerToken);
 
     useEffect(() => {
+        function getScraperDetails() {
+            fetch(`${import.meta.env.VITE_API_URL}/scraper/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${bearerToken}`,
+                },
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    setScraperDetails(data);
+                    setLoading(false);
+                })
+                .catch((error) => {
+                    console.error('Error fetching scraper details:', error);
+                });
+        }
+        function getOutputs() {
+            fetch(`${import.meta.env.VITE_API_URL}/scraper/outputs/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${bearerToken}`,
+                },
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    setOutputs(data);
+                    setOutputLoading(false);
+                })
+                .catch((error) => {
+                    console.error('Error fetching outputs:', error);
+                });
+        }
         if (bearerToken !== '') {
             getScraperDetails();
             getOutputs();
         }
-    }, [getOutputs, getScraperDetails, bearerToken]);
+    }, [id, bearerToken]);
 
     return (
         <div className="flex flex-col items-center bg-black pt-20">
             <Header />
-            <div className="bg-zinc-950 border border-2 border-white p-7 rounded-md shadow max-w-md">
+            <div className="bg-zinc-950 border-2 border-white p-7 rounded-md shadow max-w-md">
                 {
                     loading ? (
                         <div className="flex justify-center items-center h-max">
