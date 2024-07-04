@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import AlertBox from "../../widgets/alert.jsx";
 
 export default function SignUpPage() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    const [showPasswordMatchBox, setShowPasswordMatchBox] = useState(false);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -12,7 +14,7 @@ export default function SignUpPage() {
         const password = data.get('password');
         const confirmPassword = data.get('confirmPassword');
         if (password !== confirmPassword) {
-            alert('Passwords do not match: password: ' + password + ' confirmPassword: ' + confirmPassword);
+            setShowPasswordMatchBox(true);
             return;
         }
         try {
@@ -35,6 +37,11 @@ export default function SignUpPage() {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-black">
+            {
+                showPasswordMatchBox ? (
+                    <AlertBox boxTitle={'Passwords do not match'} setShowAlert={setShowPasswordMatchBox} />
+                ) : null
+            }
             <div className="max-w-md w-full space-y-8">
                 <div>
                     <h2 className="mt-6 text-center text-3xl font-extrabold text-white">Create Your account</h2>
