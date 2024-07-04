@@ -2,14 +2,17 @@ import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import Header from '../widgets/header';
 import useAuth from '../utils/useAuth';
+import AlertBox from "../widgets/alert.jsx";
 
 export default function AddScraper() {
+    const navigate = useNavigate();
     const [name, setName] = useState('');
     const [bearerToken, setBearerToken] = useState('');
     const [url, setUrl] = useState('');
     const [selectors, setSelectors] = useState({});
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
+    const [message, setMessage] = useState('');
+    const [showAlert, setShowAlert] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -26,12 +29,13 @@ export default function AddScraper() {
                 body: JSON.stringify(payload)
             });
             await response.json();
-            setLoading(false);
-            alert('Scraper created successfully');
             navigate('/dashboard');
         } catch (error) {
             console.error('Error creating scraper:', error);
-            alert('Failed to create scraper');
+            setMessage('Error creating scraper. Please try again.');
+            setShowAlert(true);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -51,7 +55,8 @@ export default function AddScraper() {
 
     const addSelector = (key) => {
         if (!key || Object.prototype.hasOwnProperty.call(selectors, key)) {
-            alert('Key is either empty or already exists.');
+            setMessage('Please enter a unique key for each selector');
+            setShowAlert(true);
             return;
         }
         setSelectors(prevSelectors => ({ ...prevSelectors, [key]: '' }));
@@ -62,6 +67,11 @@ export default function AddScraper() {
     return (
         <div className="min-h-screen bg-black flex flex-col items-center justify-center">
             <Header />
+            {
+                showAlert ? (
+                    <AlertBox boxTitle={message} setShowAlert={setShowAlert} />
+                ) : null
+            }
             <h2 className="mt-6 text-center text-3xl font-extrabold text-white">Create a Scraper</h2>
             <form onSubmit={handleSubmit} className="w-full max-w-lg p-8 rounded-md shadow space-y-4">
                 <div>

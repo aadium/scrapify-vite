@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import AlertBox from "../../widgets/alert.jsx";
 
 export default function SignInPage() {
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [showErrorAlert, setShowErrorAlert] = useState(false);
     const nav = useNavigate();
     async function handleSubmit(event) {
         event.preventDefault();
@@ -20,19 +23,27 @@ export default function SignInPage() {
             });
             const data = await response.json();
             if (data.error) {
-                alert(data.error);
+                setError(data.error);
+                setShowErrorAlert(true);
             } else {
                 localStorage.setItem('token', JSON.stringify(data.token));
                 nav('/dashboard');
             }
         } catch (error) {
-            alert('An error occurred. Please try again.');
+            console.error('Signin failed:', error);
+            setError('Signin failed. Please try again.');
+            setShowErrorAlert(true);
         } finally {
             setLoading(false);
         }
     }
     return (
         <div className="min-h-screen flex items-center justify-center bg-black">
+            {
+                showErrorAlert ? (
+                    <AlertBox boxTitle={`Error signing you in: ${error}`} setShowAlert={setShowErrorAlert} />
+                ) : null
+            }
             <div className="max-w-md w-full space-y-8">
                 <div>
                     <h2 className="mt-6 text-center text-3xl font-extrabold text-white">Sign in to your account</h2>

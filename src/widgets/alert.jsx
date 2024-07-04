@@ -1,13 +1,42 @@
-export default function AlertDialog() {
+import PropTypes from "prop-types";
+
+function AlertBox({ setShowAlert, boxTitle }) {
     return (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded fixed z-10" role="alert">
-            <strong className="font-bold">Holy smokes!</strong>
-            <span className="block sm:inline">Something seriously bad happened.</span>
-            <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
-                <svg className="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg"
-                     viewBox="0 0 20 20"><title>Close</title><path
-                    d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
-            </span>
+        <div className="fixed inset-0 z-10 overflow-y-auto">
+            <div
+                className="fixed inset-0 w-full h-full bg-black opacity-50"
+                onClick={() => { setShowAlert(false); }}
+            ></div>
+            <div className="flex items-center px-4 py-4">
+                <div className="relative w-min max-w-lg p-3 mx-auto border-2 border-orange-600 bg-zinc-900 rounded-lg shadow-lg">
+                    <div className="sm:flex w-max">
+                        <div className="text-center h-max sm:text-left flex flex-row">
+                            <div className="text-center m-auto pl-2 pr-4">
+                                <h4 className="text-l text-white font-medium">
+                                    {boxTitle}
+                                </h4>
+                            </div>
+                            <div className="items-center gap-3 sm:flex">
+                                <button
+                                    className="group w-min flex-1 text-white rounded-md bg-transparent"
+                                    onClick={() => { setShowAlert(false); }}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mx-auto group-hover:stroke-orange-500 transition transition-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
+
+AlertBox.propTypes = {
+    setShowAlert: PropTypes.func.isRequired,
+    boxTitle: PropTypes.string.isRequired,
+};
+
+export default AlertBox;

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Header from '../../widgets/header';
 import useAuth from '../../utils/useAuth';
 import ConfirmBox from "../../widgets/confirm.jsx";
+import AlertBox from "../../widgets/alert.jsx";
 
 export default function ScraperDetails() {
     const navigate = useNavigate();
@@ -14,6 +15,7 @@ export default function ScraperDetails() {
     const [loading, setLoading] = useState(true);
     const [outputLoading, setOutputLoading] = useState(true);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
     function runScraper() {
         setRunning(true);
@@ -32,7 +34,7 @@ export default function ScraperDetails() {
             .then((data) => {
                 console.log(data.message);
                 setRunning(false);
-                alert('Scraper ran successfully!');
+                setShowSuccessAlert(true);
             })
             .catch((error) => {
                 console.error('Error running scraper:', error);
@@ -158,6 +160,11 @@ export default function ScraperDetails() {
             {
                 showDeleteConfirm && (
                     <ConfirmBox boxTitle={'Delete Scraper'} boxDesc={'Are you sure you want to delete this scraper?'} actionText={'Delete'} onConfirm={deleteScraper} setOpenModal={setShowDeleteConfirm} />
+                )
+            }
+            {
+                showSuccessAlert && (
+                    <AlertBox boxTitle={'Scraper ran successfully'} setShowAlert={setShowSuccessAlert} />
                 )
             }
             <div className="bg-zinc-950 border-2 border-white p-7 rounded-md shadow max-w-md">
