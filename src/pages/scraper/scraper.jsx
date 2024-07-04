@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Header from '../../widgets/header';
 import useAuth from '../../utils/useAuth';
+import ConfirmBox from "../../widgets/confirm.jsx";
 
 export default function ScraperDetails() {
     const navigate = useNavigate();
@@ -12,6 +13,7 @@ export default function ScraperDetails() {
     const { id } = useParams();
     const [loading, setLoading] = useState(true);
     const [outputLoading, setOutputLoading] = useState(true);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     function runScraper() {
         setRunning(true);
@@ -38,11 +40,11 @@ export default function ScraperDetails() {
             });
     }
 
-    function deleteScraper() {
-        const confirmDelete = confirm('Are you sure you want to delete this scraper?');
-        if (!confirmDelete) {
-            return;
-        }
+    function handleDelete() {
+        setShowDeleteConfirm(true);
+    }
+
+    const deleteScraper = async () => {
         fetch(`${import.meta.env.VITE_API_URL}/scraper/${id}`, {
             method: 'DELETE',
             headers: {
@@ -153,6 +155,11 @@ export default function ScraperDetails() {
     return (
         <div className="flex flex-col items-center bg-black pt-20">
             <Header />
+            {
+                showDeleteConfirm && (
+                    <ConfirmBox boxTitle={'Delete Scraper'} boxDesc={'Are you sure you want to delete this scraper?'} actionText={'Delete'} onConfirm={deleteScraper} setOpenModal={setShowDeleteConfirm} />
+                )
+            }
             <div className="bg-zinc-950 border-2 border-white p-7 rounded-md shadow max-w-md">
                 {
                     loading ? (
@@ -206,7 +213,7 @@ export default function ScraperDetails() {
                                         'Run'
                                     )}
                                 </button>
-                                <button className="rounded-md bg-orange-600 py-2 px-4 text-white w-full hover:bg-orange-700 transition duration-300" onClick={deleteScraper}>
+                                <button className="rounded-md bg-orange-600 py-2 px-4 text-white w-full hover:bg-orange-700 transition duration-300" onClick={handleDelete}>
                                     Delete
                                 </button>
                             </div>

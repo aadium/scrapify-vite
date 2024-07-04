@@ -1,12 +1,16 @@
 import { useNavigate } from 'react-router-dom';
+import {useState} from "react";
+import ConfirmBox from "./confirm.jsx";
 
 export default function Header() {
     const navigate = useNavigate();
-    function handleSignOut() {
-        const confirm = window.confirm('Are you sure you want to sign out?');
-        if (!confirm) return;
+    const [showSignOutBox, setShowSignOutBox] = useState(false);
+    const signOutDelToken = () => {
         localStorage.removeItem('token');
         navigate('/');
+    }
+    function handleSignOut() {
+        setShowSignOutBox(true);
     }
     return (
         <nav className="bg-black fixed top-0 z-10 w-full border-b-2 border-orange-600">
@@ -22,6 +26,13 @@ export default function Header() {
                                     <button onClick={handleSignOut} className="p-2 text-white hover:text-orange-500 transition">
                                         Sign Out
                                     </button>
+                                    {
+                                        showSignOutBox ? (
+                                            <div className="absolute right-0 top-0 mt-12 w-48 bg-white rounded-lg shadow-lg p-2">
+                                                <ConfirmBox onConfirm={signOutDelToken} setOpenModal={setShowSignOutBox} boxTitle={'Sign Out'} boxDesc={'Are you sure you want to sign out?'} actionText={'Sign out'} />
+                                            </div>
+                                        ) : null
+                                    }
                                 </div>
                             </div>
                         </div>
