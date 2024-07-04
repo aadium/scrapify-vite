@@ -69,19 +69,20 @@ export default function ScraperDetails() {
         })
             .then(response => response.json())
             .catch(error => console.error('Error fetching output:', error));
-        if (data.length > 0) {
-            const columnTitles = Object.keys(data[0]).join(',');
-            const csvRows = data.map(row =>
-                Object.values(row).map(value =>
-                    `"${value.toString().replace(/"/g, '""')}"`).join(',')
-            );
-            const csv = [columnTitles, ...csvRows].join('\n');
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const downloadLink = document.createElement('a');
-            downloadLink.href = URL.createObjectURL(blob);
-            downloadLink.download = `${oid}.csv`;
-            downloadLink.click();
+        if (data.length <= 0) {
+            return;
         }
+        const columnTitles = Object.keys(data[0]).join(',');
+        const csvRows = data.map(row =>
+            Object.values(row).map(value =>
+                `"${value.toString().replace(/"/g, '""')}"`).join(',')
+        );
+        const csv = [columnTitles, ...csvRows].join('\n');
+        const blob = new Blob([csv], {type: 'text/csv'});
+        const downloadLink = document.createElement('a');
+        downloadLink.href = URL.createObjectURL(blob);
+        downloadLink.download = `${oid}.csv`;
+        downloadLink.click();
     }
 
     async function downloadXML(oid) {
