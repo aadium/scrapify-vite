@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AlertBox from "../../widgets/alert.jsx";
+import AlertBox from "../../components/alert.jsx";
 
 export default function SignInPage() {
     const [loading, setLoading] = useState(false);

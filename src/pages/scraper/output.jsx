@@ -5,8 +5,9 @@ import {useParams} from 'react-router-dom';
 import sparkles from '../../assets/sparkler.png';
 import {requestGroqAi} from '../../utils/groq';
 import Modal from '../../utils/modal';
-import Header from '../../widgets/header';
+import Header from '../../components/header';
 import useAuth from '../../utils/useAuth';
+import OutputTable from "../../components/outputTable.jsx";
 
 export default function Output() {
     const { id } = useParams();
@@ -152,34 +153,7 @@ export default function Output() {
                                 <button className="bg-green-700 text-white font-bold py-2 px-4 mr-2 rounded-md mb-4" onClick={() => downloadCSV(id)}>Download CSV</button>
                                 <button className="bg-red-600 text-white font-bold py-2 px-4 rounded-md mb-4" onClick={() => downloadXML(id)}>Download XML</button>
                             </div>
-                            <table className="table-auto rounded-md w-full overflow-hidden">
-                                <thead className="bg-white">
-                                    <tr>
-                                        {keys.map(key => (
-                                            <th key={key} className="px-4 py-2 text-black">{key}</th>
-                                        ))}
-                                    </tr>
-                                </thead>
-                                <tbody className="bg-zinc-900 rounded-b-lg text-white">
-                                    {scraperOutput.map((item, index) => (
-                                        <tr key={index}>
-                                            {keys.map(key => {
-                                                const sentiment = sentimentAnalysis.length > 0 && sentimentAnalysis[index] && sentimentAnalysis[index].find(s => s.field === key);
-                                                const cellColor = sentiment ? getCellColor(sentiment.score) : '';
-                                                return (
-                                                    <td key={key} className={`px-4 py-3 ${cellColor}`}>
-                                                        {item[key]} {
-                                                            sentiment && (
-                                                                <span className="text-xs ml-2">{sentiment.score}</span>
-                                                            )
-                                                        }
-                                                    </td>
-                                                );
-                                            })}
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                            <OutputTable getCellColor={getCellColor} scraperOutput={scraperOutput} sentimentAnalysis={sentimentAnalysis} keys={keys} />
                             {showDialog && (
                                 <Modal onClose={() => setShowDialog(false)}>
                                     <ReactMarkdown>{markdownContent}</ReactMarkdown>
