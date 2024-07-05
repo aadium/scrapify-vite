@@ -1,4 +1,4 @@
-import LandingHeader from "../widgets/landingHeader";
+import LandingHeader from "../components/landingHeader";
 import GitHub from "../assets/github.svg";
 import landingBg from "../assets/landing-bg.png";
 

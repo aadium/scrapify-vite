@@ -1,8 +1,8 @@
 import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import Header from '../widgets/header';
+import Header from '../components/header';
 import useAuth from '../utils/useAuth';
-import AlertBox from "../widgets/alert.jsx";
+import AlertBox from "../components/alert.jsx";
 
 export default function AddScraper() {
     const navigate = useNavigate();
