@@ -31,7 +31,7 @@ export default function Landing() {
 
       <footer className="flex h-16 w-full items-center justify-center">
         <a
-          href="https://github.com/aadium/scrapify-fe"
+          href="https://github.com/aadium/scrapify-vite"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="GitHub"
