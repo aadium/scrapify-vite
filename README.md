@@ -10,6 +10,12 @@ This project is a web scraping application built using React.js with Vite, desig
 - **Output Page**: View the scraped and processed data on a separate output page.
 - **Modern Tech Stack**: Built with React.js and Vite for fast development and HMR (Hot Module Replacement).
 
+## Demo
+
+<video src="./src/assets/demo.mp4" height="240" controls></video>
+<br>
+![ai](./src/assets/ai_features.gif)
+
 ## Getting Started
 
 ### Prerequisites
