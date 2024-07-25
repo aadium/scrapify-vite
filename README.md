@@ -11,9 +11,11 @@ This project is a web scraping application built using React.js with Vite, desig
 - **Modern Tech Stack**: Built with React.js and Vite for fast development and HMR (Hot Module Replacement).
 
 ## Demo
+<video width="600" controls>
+  <source src="./src/assets/demo.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
-<video src="./src/assets/demo.mp4" height="240" controls></video>
-<br>
 ![ai](./src/assets/ai_features.gif)
 
 ## Getting Started
