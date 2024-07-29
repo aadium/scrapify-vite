@@ -1,8 +1,9 @@
 import LandingHeader from "../components/landingHeader";
 import GitHub from "../assets/github.svg";
 import landingBg from "../assets/landing-bg.png";
-import { Analytics } from "@vercel/analytics/react"
+import { inject } from "@vercel/analytics"
 
+inject()
 export default function Landing() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center py-2" style={{
@@ -10,7 +11,6 @@ export default function Landing() {
       backgroundSize: 'cover',
       backgroundPosition: 'center'
     }}>
-      <Analytics />
       <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
         <LandingHeader />
         <h1 className="text-6xl font-bold">
