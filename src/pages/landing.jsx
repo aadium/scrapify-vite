@@ -1,6 +1,7 @@
 import LandingHeader from "../components/landingHeader";
 import GitHub from "../assets/github.svg";
 import landingBg from "../assets/landing-bg.png";
+import { Analytics } from "@vercel/analytics/react"
 
 export default function Landing() {
   return (
@@ -9,7 +10,7 @@ export default function Landing() {
       backgroundSize: 'cover',
       backgroundPosition: 'center'
     }}>
-
+      <Analytics />
       <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
         <LandingHeader />
         <h1 className="text-6xl font-bold">

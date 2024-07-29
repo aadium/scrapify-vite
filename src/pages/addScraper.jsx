@@ -3,6 +3,7 @@ import {useNavigate} from 'react-router-dom';
 import Header from '../components/header';
 import useAuth from '../utils/useAuth';
 import AlertBox from "../components/alert.jsx";
+import { Analytics } from "@vercel/analytics/react";
 
 export default function AddScraper() {
     const navigate = useNavigate();
@@ -67,6 +68,7 @@ export default function AddScraper() {
     return (
         <div className="min-h-screen bg-black flex flex-col items-center justify-center">
             <Header />
+            <Analytics />
             {
                 showAlert ? (
                     <AlertBox boxTitle={message} setShowAlert={setShowAlert} />

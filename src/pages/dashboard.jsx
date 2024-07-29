@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../components/header';
 import useAuth from '../utils/useAuth';
 import ScrapersTable from "../components/scrapersTable.jsx";
+import { Analytics } from "@vercel/analytics/react"
 
 export default function Dashboard() {
     const navigate = useNavigate();
@@ -42,6 +43,7 @@ export default function Dashboard() {
     return (
         <div className="min-h-screen flex flex-col py-2">
             <Header />
+            <Analytics />
             <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center pt-12">
                 <h2 className="mt-6 text-center text-3xl font-extrabold text-white">Your Scrapers</h2>
                 <div className="mt-6 w-full">
